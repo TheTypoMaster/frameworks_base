@@ -91,4 +91,7 @@
     <dimen name="recent_app_sidebar_item_size">60dp</dimen>
     <dimen name="recent_app_sidebar_item_padding">2dp</dimen>
     <dimen name="recent_app_sidebar_item_title_text_size">11sp</dimen>
+
+    <dimen name="ribbon_drag_handle_height">25dp</dimen>
+
 </resources>

@@ -36,6 +36,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.StatusBarPanel;
@@ -61,7 +62,6 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel {
 
     private int mThreshold;
     private boolean mHorizontal;
-    private boolean mLeftNavbar;
 
     private boolean mLaunching;
     private boolean mDragging;
@@ -285,8 +285,7 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel {
                     mDragging = true;
                 }
                 if (mDragging) {
-                    float offset = Math.max(mHorizontal && mLeftNavbar
-                            ? currentTouch - mStartTouch : mStartTouch - currentTouch, 0.0f);
+                    float offset = Math.max(mStartDrag - currentTouch, 0.0f);
                     mCircle.setDragDistance(offset);
                     mDraggedFarEnough = Math.abs(mStartTouch - currentTouch) > mThreshold;
                     mCircle.setDraggedFarEnough(mDraggedFarEnough);
@@ -294,8 +293,7 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                if (mDraggedFarEnough && (mTargetActivities[mCircle.mIntersectIndex] != null &&
-                        !ACTION_NONE.equals(mTargetActivities[mCircle.mIntersectIndex]))) {
+                if (mDraggedFarEnough) {
                     if (mCircle.isAnimationRunning(true  /* enterAnimation */)) {
                         mLaunchPending = true;
                         mCircle.setAnimatingOut(true);

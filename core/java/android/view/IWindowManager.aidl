@@ -281,6 +281,13 @@ interface IWindowManager
      */
     int getSystemUIVisibility();
 
+    /**
+     * Toggle global menu
+     *
+     * @hide
+     */
+    void toggleGlobalMenu();
+
     /** FLOAT VIEW **/
     Rect getAppFullscreenViewRect();
     Rect getAppMinimumViewRect();
