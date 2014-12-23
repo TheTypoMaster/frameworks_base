@@ -564,6 +564,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.Secure.UI_THEME_AUTO_MODE), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NAVBAR_LEFT_IN_LANDSCAPE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_BUTTON_TINT),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -734,6 +737,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mSidebarPosition = sidebarPosition;
                 removeSidebarView();
                 addSidebarView();
+            }
+
+            if (mNavigationBarView != null) {
+                boolean navLeftInLandscape = Settings.System.getIntForUser(
+                    resolver, Settings.System.NAVBAR_LEFT_IN_LANDSCAPE,
+                    0, mCurrentUserId) == 1;
+                mNavigationBarView.setLeftInLandscape(navLeftInLandscape);
             }
 
             mBatterySaverBarColor = Settings.System.getIntForUser(resolver,

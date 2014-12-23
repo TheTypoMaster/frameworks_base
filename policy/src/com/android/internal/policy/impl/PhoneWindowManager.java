@@ -747,6 +747,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.PA_PIE_STATE), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NAVBAR_LEFT_IN_LANDSCAPE), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_CAN_MOVE), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -1786,6 +1789,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                     com.android.internal.R.dimen.navigation_bar_width),
                         UserHandle.USER_CURRENT);
             }
+
+            mNavigationBarLeftInLandscape = Settings.System.getInt(resolver,
+                    Settings.System.NAVBAR_LEFT_IN_LANDSCAPE, 0) == 1;
 
             if (mSystemReady) {
                 int pointerLocation = Settings.System.getIntForUser(resolver,
