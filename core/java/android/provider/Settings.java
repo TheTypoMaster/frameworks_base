@@ -4190,6 +4190,13 @@ public final class Settings {
          */
         public static final String SCREENSHOT_DELAY = "screenshot_delay";
 
+	/**
+         * Config for advanced power menu
+         *
+         * @hide
+         */
+        public static final String QUICK_TILE_CONFIG = "quick_tile_config";
+
         /**
          * Disabled Transition animations of the android system
          * @hide

@@ -86,7 +86,7 @@ public class Action {
             } catch (RemoteException e) {
             }
 
-            IStatusBarService barService = IStatusBarService.Stub.asInterface(
+            final IStatusBarService barService = IStatusBarService.Stub.asInterface(
                     ServiceManager.getService(Context.STATUS_BAR_SERVICE));
             if (barService == null) {
                 return; // ouch
