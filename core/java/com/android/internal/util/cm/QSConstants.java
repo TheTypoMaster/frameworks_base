@@ -54,7 +54,6 @@ public class QSConstants {
     public static final String TILE_USB_TETHER = "usb_tether";
     public static final String TILE_HEADS_UP = "heads_up";
     public static final String TILE_PIECONTROL = "togglePieControl";
-    public static final String TILE_NAVBAR = "toggleNavbar";
     public static final String TILE_THEMES = "toggleThemes";
     public static final String TILE_TRDS = "trds";
     public static final String TILE_KERNEL_ADIUTOR = "kernel_adiutor";
@@ -102,7 +101,6 @@ public class QSConstants {
         STATIC_TILES_AVAILABLE.add(TILE_USB_TETHER);
         STATIC_TILES_AVAILABLE.add(TILE_HEADS_UP);
         STATIC_TILES_AVAILABLE.add(TILE_PIECONTROL);
-        STATIC_TILES_AVAILABLE.add(TILE_NAVBAR);
         STATIC_TILES_AVAILABLE.add(TILE_THEMES);
         STATIC_TILES_AVAILABLE.add(TILE_TRDS);
         STATIC_TILES_AVAILABLE.add(TILE_KERNEL_ADIUTOR);
