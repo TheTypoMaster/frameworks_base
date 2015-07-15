@@ -1267,6 +1267,12 @@ public final class Settings {
 
             /* CUSTOM CHANGES */
             MOVED_TO_SECURE.add(Secure.VOLUME_LINK_NOTIFICATION);
+            MOVED_TO_SECURE.add(Secure.SEARCH_PANEL_ENABLED);
+            for (String s : Secure.NAVIGATION_RING_TARGETS) {
+                MOVED_TO_SECURE.add(s);
+            }
+
+            /* CM12 CHANGES */
             MOVED_TO_SECURE.add(Secure.QS_TILES);
             MOVED_TO_SECURE.add(Secure.QS_USE_MAIN_TILES);
             MOVED_TO_SECURE.add(Secure.QS_SHOW_BRIGHTNESS_SLIDER);
@@ -6971,12 +6977,6 @@ public final class Settings {
         public static final String RECENTS_LONG_PRESS_ACTIVITY = "recents_long_press_activity";
 
         /**
-         * Whether search panel is enabled.
-         * @hide
-         */
-        public static final String SEARCH_PANEL_ENABLED = "search_panel_enabled";
-
-        /**
          * String to contain power menu actions
          * @hide
          */
@@ -7040,6 +7040,22 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_HIDE_TILES_WITH_SENSITIVE_DATA =
                 "lockscreen_hide_qs_tiles_with_sensitive_data";
+
+        /**
+         * Custom navring actions
+         * @hide
+         */
+        public static final String[] NAVIGATION_RING_TARGETS = new String[] {
+                "navigation_ring_targets_0",
+                "navigation_ring_targets_1",
+                "navigation_ring_targets_2",
+        };
+
+        /**
+         * Whether search panel is enabled.
+         * @hide
+         */
+        public static final String SEARCH_PANEL_ENABLED = "search_panel_enabled";
 
         /**
          * This are the settings to be backed up.
