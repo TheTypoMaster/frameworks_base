@@ -517,6 +517,7 @@ public class NavigationBarView extends LinearLayout {
             ViewGroup container = (ViewGroup) mRotatedViews[i];
             if (container != null) {
                 updateLightsOutResources(container);
+                recreateNavigationBar();
             }
         }
     }
@@ -542,7 +543,7 @@ public class NavigationBarView extends LinearLayout {
 
     @Override
     public void setLayoutDirection(int layoutDirection) {
-        getIcons(getContext().getResources());
+        getIcons(mThemedResources != null ? mThemedResources : getContext().getResources());
         updateSettings();
 
         super.setLayoutDirection(layoutDirection);
@@ -1172,6 +1173,10 @@ public class NavigationBarView extends LinearLayout {
             default:
                 return "VISIBLE";
         }
+    }
+
+    protected void updateResources() {
+        getIcons(mContext.getResources());
     }
 
     private void updateSettings() {
