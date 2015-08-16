@@ -3223,6 +3223,14 @@ public final class Settings {
         public static final String STATUS_BAR_DATE_FORMAT = "status_bar_date_format";
 
         /**
+         * Position of date
+         * 0 - Left of clock
+         * 1 - Right of clock
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_DATE_POSITION = "statusbar_clock_date_position";
+
+        /**
          * Display style of the status bar battery information
          * 0: Display the battery an icon in portrait mode
          * 2: Display the battery as a circle
