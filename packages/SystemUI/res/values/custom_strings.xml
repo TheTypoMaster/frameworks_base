@@ -109,6 +109,7 @@
     <string name="shortcut_torch">Torch</string>
     <string name="shortcut_chamber">Chamber of Secrets</string>
     <string name="shortcut_reboot">Reboot</string>
+    <string name="shortcut_restart_ui">Restart SystemUI</string>
     <string name="shortcut_recovery">Recovery</string>
     <string name="shortcut_screensleep">Sleep Screen</string>
     <string name="shortcut_toggle_title">Action to perform</string>
