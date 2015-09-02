@@ -356,6 +356,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT" />
+                <category android:name="com.android.systemui.SHORTCUT_COS" />
             </intent-filter>
         </activity>
         <activity
@@ -368,6 +369,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT" />
+                <category android:name="com.android.systemui.SHORTCUT_COS" />
             </intent-filter>
         </activity>
         <activity
@@ -380,6 +382,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT" />
+                <category android:name="com.android.systemui.SHORTCUT_COS" />
             </intent-filter>
         </activity>
         <activity
@@ -392,6 +395,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT" />
+                <category android:name="com.android.systemui.SHORTCUT_COS" />
             </intent-filter>
         </activity>
         <activity
@@ -404,7 +408,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT" />
-                <category android:name="com.android.systemui.SHORTCUT_EXTRA" />
+                <category android:name="com.android.systemui.SHORTCUT_COS" />
             </intent-filter>
         </activity>
         <activity
