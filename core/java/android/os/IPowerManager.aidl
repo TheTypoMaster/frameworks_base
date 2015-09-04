@@ -60,6 +60,7 @@ interface IPowerManager
     void setAttentionLight(boolean on, int color);
 
     void cpuBoost(int duration);
+    void launchBoost();
 
     boolean setPowerProfile(String profile);
     String getPowerProfile();

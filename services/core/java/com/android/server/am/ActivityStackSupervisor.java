@@ -1348,6 +1348,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
                             Display.DEFAULT_DISPLAY : mFocusedStack.mDisplayId) :
                             (container.mActivityDisplay == null ? Display.DEFAULT_DISPLAY :
                                     container.mActivityDisplay.mDisplayId)));
+            /* Acquire perf lock during new app launch */
+            mPm.launchBoost();
         }
 
         ActivityRecord sourceRecord = null;
@@ -2732,7 +2734,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 }
             }
         }
-        mPm.cpuBoost(2000 * 1000);
+        mPm.launchBoost();
 
         /* Delay Binder Explicit GC during application launch */
         BinderInternal.modifyDelayedGcParams();
