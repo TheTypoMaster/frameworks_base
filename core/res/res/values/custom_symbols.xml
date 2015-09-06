@@ -278,4 +278,8 @@
   <java-symbol type="style" name="Theme.Material.BenzoDark.Dialog" />
   <java-symbol type="style" name="Theme.Material.BenzoDark.Dialog.Alert" />
 
+  <!-- Slim navigation extra strings -->
+  <java-symbol type="string" name="disable_pie_navigation_error" />
+  <java-symbol type="string" name="disable_navigation_pie_error" />
+
 </resources>

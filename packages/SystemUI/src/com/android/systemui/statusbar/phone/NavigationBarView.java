@@ -118,7 +118,7 @@ public class NavigationBarView extends LinearLayout {
     private int mMenuVisibility;
     private int mMenuSetting;
     private boolean mOverrideMenuKeys;
-
+    private boolean mIsImeButtonVisible = false;
     private boolean mIsHandlerCallbackActive = false;
 
     private boolean mImeArrowVisibility;
