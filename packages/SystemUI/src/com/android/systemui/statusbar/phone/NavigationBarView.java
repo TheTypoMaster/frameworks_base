@@ -175,6 +175,8 @@ public class NavigationBarView extends LinearLayout {
 
     private KeyButtonView.LongClickCallback mCallback;
 
+    private boolean mDoubleTapToSleep;
+
     // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
     final static boolean WORKAROUND_INVALID_LAYOUT = true;
     final static int MSG_CHECK_INVALID_LAYOUT = 8686;
@@ -273,6 +275,10 @@ public class NavigationBarView extends LinearLayout {
             // restore alpha to previous state first
             if (mIsDim || mIsAnimating) {
                 mIsAnimating = false;
+
+                getNavButtons().clearAnimation();
+                mIsDim = false;
+                getNavButtons().setAlpha(mOriginalAlpha);
                 resetDim(navButtons);
             }
             if (mDimNavButtons && !mIsExpandedDesktopOn &&
@@ -371,6 +377,8 @@ public class NavigationBarView extends LinearLayout {
             }
         });
 
+        mSettingsObserver = new SettingsObserver(new Handler());
+
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mIsPowerSaveMode = mPowerManager.isPowerSaveMode();
 
@@ -389,6 +397,7 @@ public class NavigationBarView extends LinearLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mSettingsObserver.unobserve();
+        mContext.unregisterReceiver(mBatteryDimReceiver);
     }
 
     public BarTransitions getBarTransitions() {
@@ -424,11 +433,11 @@ public class NavigationBarView extends LinearLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         initDownStates(event);
-        if (mDoubleTapToSleep) {
-            mDoubleTapGesture.onTouchEvent(event);
-        }
         if (mDimNavButtonsTouchAnywhere) {
             onNavButtonTouched();
+        }
+        if (mDoubleTapToSleep) {
+            mDoubleTapGesture.onTouchEvent(event);
         }
         if (!mDelegateIntercepted && mTaskSwitchHelper.onTouchEvent(event)) {
             return true;
@@ -1288,6 +1297,84 @@ public class NavigationBarView extends LinearLayout {
 
     }
 
+    private class SettingsObserver extends ContentObserver {
+
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_IME_ARROWS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DIM_NAV_BUTTONS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DIM_NAV_BUTTONS_TIMEOUT), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DIM_NAV_BUTTONS_ALPHA), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DIM_NAV_BUTTONS_ANIMATE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DIM_NAV_BUTTONS_ANIMATE_DURATION), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DIM_NAV_BUTTONS_TOUCH_ANYWHERE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_NAVBAR), false, this);
+            resolver.registerContentObserver(Settings.Global.getUriFor(
+                    Settings.Global.POLICY_CONTROL), false, this);
+
+            onChange(false);
+        }
+
+        void unobserve() {
+            mContext.getContentResolver().unregisterContentObserver(this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            update();
+            onNavButtonTouched();
+            setNavigationIconHints(mNavigationIconHints, true);
+        }
+
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            mImeArrowVisibility =
+                    (Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_IME_ARROWS, HIDE_IME_ARROW,
+                    UserHandle.USER_CURRENT) == SHOW_IME_ARROW);
+            mDimNavButtons = (Settings.System.getIntForUser(resolver,
+                    Settings.System.DIM_NAV_BUTTONS, 0,
+                    UserHandle.USER_CURRENT) == 1);
+            mDimNavButtonsTimeout = Settings.System.getIntForUser(resolver,
+                    Settings.System.DIM_NAV_BUTTONS_TIMEOUT, 3000,
+                    UserHandle.USER_CURRENT);
+            mDimNavButtonsAlpha = (float) Settings.System.getIntForUser(resolver,
+                    Settings.System.DIM_NAV_BUTTONS_ALPHA, 50,
+                    UserHandle.USER_CURRENT) / 100.0f;
+            mDimNavButtonsAnimate = (Settings.System.getIntForUser(resolver,
+                    Settings.System.DIM_NAV_BUTTONS_ANIMATE, 0,
+                    UserHandle.USER_CURRENT) == 1);
+            mDimNavButtonsAnimateDuration = Settings.System.getIntForUser(resolver,
+                    Settings.System.DIM_NAV_BUTTONS_ANIMATE_DURATION, 2000,
+                    UserHandle.USER_CURRENT);
+            mDimNavButtonsTouchAnywhere = (Settings.System.getIntForUser(resolver,
+                    Settings.System.DIM_NAV_BUTTONS_TOUCH_ANYWHERE, 0,
+                    UserHandle.USER_CURRENT) == 1);
+            mDoubleTapToSleep = (Settings.System.getIntForUser(resolver,
+                    Settings.System.DOUBLE_TAP_SLEEP_NAVBAR, 0,
+                    UserHandle.USER_CURRENT) == 1);
+            String expDeskString = Settings.Global.getStringForUser(resolver,
+                    Settings.Global.POLICY_CONTROL, UserHandle.USER_CURRENT);
+            mIsExpandedDesktopOn = (expDeskString != null ?
+                    expDeskString.equals("immersive.full=*") : false);
+        }
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("NavigationBarView {");
         final Rect r = new Rect();
@@ -1357,83 +1444,6 @@ public class NavigationBarView extends LinearLayout {
 
     public interface OnVerticalChangedListener {
         void onVerticalChanged(boolean isVertical);
-    }
-
-    private class SettingsObserver extends UserContentObserver {
-
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void observe() {
-            super.observe();
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_IME_ARROWS), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DIM_NAV_BUTTONS), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DIM_NAV_BUTTONS_TIMEOUT), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DIM_NAV_BUTTONS_ALPHA), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DIM_NAV_BUTTONS_ANIMATE), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DIM_NAV_BUTTONS_ANIMATE_DURATION), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DIM_NAV_BUTTONS_TOUCH_ANYWHERE), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DOUBLE_TAP_SLEEP_NAVBAR), false, this);
-            resolver.registerContentObserver(Settings.Global.getUriFor(
-                    Settings.Global.POLICY_CONTROL), false, this);
-
-            // intialize mModlockDisabled
-            onChange(false);
-        }
-
-        @Override
-        protected void unobserve() {
-            super.unobserve();
-            mContext.getContentResolver().unregisterContentObserver(this);
-        }
-
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            update();
-            onNavButtonTouched();
-            setNavigationIconHints(mNavigationIconHints, true);
-        }
-
-        public void update() {
-            ContentResolver resolver = mContext.getContentResolver();
-
-            mDimNavButtons = (Settings.System.getIntForUser(resolver,
-                    Settings.System.DIM_NAV_BUTTONS, 0,
-                    UserHandle.USER_CURRENT) == 1);
-            mDimNavButtonsTimeout = Settings.System.getIntForUser(resolver,
-                    Settings.System.DIM_NAV_BUTTONS_TIMEOUT, 3000,
-                    UserHandle.USER_CURRENT);
-            mDimNavButtonsAlpha = (float) Settings.System.getIntForUser(resolver,
-                    Settings.System.DIM_NAV_BUTTONS_ALPHA, 50,
-                    UserHandle.USER_CURRENT) / 100.0f;
-            mDimNavButtonsAnimate = (Settings.System.getIntForUser(resolver,
-                    Settings.System.DIM_NAV_BUTTONS_ANIMATE, 0,
-                    UserHandle.USER_CURRENT) == 1);
-            mDimNavButtonsAnimateDuration = Settings.System.getIntForUser(resolver,
-                    Settings.System.DIM_NAV_BUTTONS_ANIMATE_DURATION, 2000,
-                    UserHandle.USER_CURRENT);
-            mDimNavButtonsTouchAnywhere = (Settings.System.getIntForUser(resolver,
-                    Settings.System.DIM_NAV_BUTTONS_TOUCH_ANYWHERE, 0,
-                    UserHandle.USER_CURRENT) == 1);
-            mDoubleTapToSleep = (Settings.System.getIntForUser(resolver,
-                    Settings.System.DOUBLE_TAP_SLEEP_NAVBAR, 0,
-                    UserHandle.USER_CURRENT) == 1);
-            String expDeskString = Settings.Global.getStringForUser(resolver,
-                    Settings.Global.POLICY_CONTROL, UserHandle.USER_CURRENT);
-            mIsExpandedDesktopOn = (expDeskString != null ?
-                    expDeskString.equals("immersive.full=*") : false);
-        }
     }
 
     private Runnable mNavButtonDimmer = new Runnable() {
