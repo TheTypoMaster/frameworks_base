@@ -968,7 +968,7 @@ public class NotificationManagerService extends SystemService {
             updateNotificationPulse();
 
             mDisableDuckingWhileMedia = Settings.Global.getInt(mContext.getContentResolver(),
-                    Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK, 0) == 1;
+                    Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK, 1) == 1;
             updateDisableDucking();
         }
     }
