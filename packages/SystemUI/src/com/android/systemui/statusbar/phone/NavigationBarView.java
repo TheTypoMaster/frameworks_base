@@ -176,8 +176,6 @@ public class NavigationBarView extends LinearLayout {
 
     private KeyButtonView.LongClickCallback mCallback;
 
-    private boolean mDoubleTapToSleep;
-
     // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
     final static boolean WORKAROUND_INVALID_LAYOUT = true;
     final static int MSG_CHECK_INVALID_LAYOUT = 8686;
