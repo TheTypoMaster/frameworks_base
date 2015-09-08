@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/ic_navigation_ring_screenshot_alpha"
+    android:src="@drawable/ic_sysbar_power"
     android:tint="@color/black" />

@@ -118,11 +118,13 @@ public class NavigationRingHelpers {
         } else if (action.equals(ACTION_KILL)) {
             resourceId = R.drawable.ic_navigation_ring_killtask;
         } else if (action.equals(ACTION_POWER)) {
-            resourceId = R.drawable.ic_navigation_ring_standby;
+            resourceId = R.drawable.ic_navigation_ring_power;
         } else if (action.equals(ACTION_TORCH)) {
             resourceId = getTorchDrawableResId(context);
         } else if (action.equals(ACTION_ASSIST)) {
             resourceId = R.drawable.ic_navigation_ring_search;
+        } else if (action.equals(ACTION_NOTIFICATIONS)) {
+            resourceId = R.drawable.ic_navigation_ring_notif;
         } else if (action.startsWith("**")) {
             // SlimActions without pre-defined navring icon, try to use navbar icon instead for now
             Drawable slimActionDrawable = ActionHelper.getActionIconImage(context, action, null);
