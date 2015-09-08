@@ -66,6 +66,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -623,6 +624,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.STATUS_BAR_WEATHER_SIZE))
                     || uri.equals(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_WEATHER_FONT_STYLE))) {
+                    recreateStatusBar();
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.Secure.UI_THEME_MODE))
                     || uri.equals(Settings.System.getUriFor(
