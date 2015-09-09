@@ -111,6 +111,8 @@ public class CreateShortcut extends LauncherActivity {
     private int returnIconResId(String c) {
         if (c.equals ("Rotation")) {
             return R.drawable.ic_qs_auto_rotate;
+        } else if (c.equals("KillApp")) {
+            return R.drawable.ic_shortcut_killapp;
         } else if (c.equals("Torch")) {
             return R.drawable.ic_qs_torch;
         } else if (c.equals("SleepScreen")) {
