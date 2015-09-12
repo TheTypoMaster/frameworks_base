@@ -512,6 +512,7 @@ public final class BatteryService extends SystemService {
         int icon = getIconLocked(mBatteryProps.batteryLevel);
 
         intent.putExtra(BatteryManager.EXTRA_STATUS, mBatteryProps.batteryStatus);
+        intent.putExtra(BatteryManager.EXTRA_CHARGE_TYPE, mBatteryProps.batteryChargeType);
         intent.putExtra(BatteryManager.EXTRA_HEALTH, mBatteryProps.batteryHealth);
         intent.putExtra(BatteryManager.EXTRA_PRESENT, mBatteryProps.batteryPresent);
         intent.putExtra(BatteryManager.EXTRA_LEVEL, mBatteryProps.batteryLevel);
@@ -638,6 +639,7 @@ public final class BatteryService extends SystemService {
                 pw.println("  USB powered: " + mBatteryProps.chargerUsbOnline);
                 pw.println("  Wireless powered: " + mBatteryProps.chargerWirelessOnline);
                 pw.println("  status: " + mBatteryProps.batteryStatus);
+                pw.println("  charge type: " + mBatteryProps.batteryChargeType);
                 pw.println("  health: " + mBatteryProps.batteryHealth);
                 pw.println("  present: " + mBatteryProps.batteryPresent);
                 pw.println("  level: " + mBatteryProps.batteryLevel);
